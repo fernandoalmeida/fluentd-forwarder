@@ -2,7 +2,7 @@
 source {
   type :tail
   path '/var/log/syslog'
-  pos_file '/var/log/syslog.pos'
+  pos_file File.expand_path("../../var/pos/syslog.pos", __FILE__)
   tag 'syslog'
   format :syslog
 }
@@ -13,7 +13,7 @@ match('**') {
 
   # primary host
   server {
-    host ENV['TCP_HOST'] || '192.168.0.10' # fluentd-aggregator
+    host ENV['TCP_HOST'] || 'fluentd-aggregator'
     port ENV['TCP_PORT'] || '24224'
   }
 

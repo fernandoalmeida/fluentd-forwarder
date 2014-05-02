@@ -10,7 +10,14 @@ Vagrant.configure("2") do |config|
     vb.memory = 512
   end
 
-  config.vm.provision "puppet" do |puppet|
+  config.vm.provision :shell, :inline => <<-SH
+    if [ $(grep -c "fluentd-aggregator" /etc/hosts) -eq 0 ]
+    then
+      echo "192.168.0.10 fluentd-aggregator" >> /etc/hosts
+    fi
+  SH
+
+  config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.module_path = "puppet/modules"
     puppet.manifest_file = "init.pp"
